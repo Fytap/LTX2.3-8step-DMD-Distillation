@@ -34,10 +34,14 @@ official LTX2.3 8-step distilled base
 + phase2 DMD LoRA training to global step 2000
 ```
 
-The original workspace checkpoint was:
+Expected local checkpoint layout:
 
 ```text
-/keyan/lsh/lsh_teacher_cache_8step_distill/runs/official8_student8_av_dmd_rank16_phase2_from1500_10000/checkpoints/lora_weights_step_02000.safetensors
+checkpoints/
+├── ltx-2.3-22b-distilled-1.1.safetensors
+├── ltx-2.3-spatial-upscaler-x2-1.1.safetensors
+├── gemma/
+└── lora_weights_step_02000.safetensors   # DMD2000 LoRA, not committed
 ```
 
 During inference and VBench generation, this LoRA is loaded on top of the
@@ -108,7 +112,7 @@ Main settings:
 The phase1 checkpoint used by DMD phase2 was:
 
 ```text
-runs/official8_student8_av_quality_phase1_1500_keeponly/checkpoints/lora_weights_step_01500.safetensors
+checkpoints/phase1/lora_weights_step_01500.safetensors
 ```
 
 ### Phase 2: DMD from phase1
@@ -156,7 +160,7 @@ Main settings:
 The tested DMD2000 checkpoint is a LoRA file:
 
 ```text
-runs/official8_student8_av_dmd_rank16_phase2_from1500_10000/checkpoints/lora_weights_step_02000.safetensors
+checkpoints/dmd_phase2/lora_weights_step_02000.safetensors
 ```
 
 ## Sigma Schedule
@@ -184,10 +188,13 @@ training a separate sampler that would be hard to compare fairly.
 
 ## Dataset
 
-The training configs point to a preprocessed audio-video latent dataset:
+The training configs expect a preprocessed audio-video latent dataset. A portable
+layout would look like:
 
 ```text
-/keyan/lsh/datasets_full-modality-video-caption/preprocessed_1280x704x121_av
+data/
+└── full-modality-video-caption/
+    └── preprocessed_1280x704x121_av/
 ```
 
 The original raw dataset source used in the experiment was:
@@ -240,12 +247,12 @@ python scripts/run_vbench2_distill.py \
 
 The full VBench-2.0 comparison below uses:
 
-- official distilled 8-step baseline:
-  `/keyan/yeyi0003/LTX-2/VBench/evaluation`
-- DMD2000:
-  `/keyan/lsh/VBench/evaluation_dmd2000_480P`
+- official distilled 8-step baseline: `results/official8_vbench2_baseline/`
+- DMD2000: `results/dmd2000_vbench2_480p_cal_local_scores.log`
 
-Both are evaluated through the copied VBench workflow under `/keyan/lsh/VBench`.
+The baseline aggregate and sub-dimension scores are copied from the original
+official 8-step VBench run. The DMD2000 full score log is included in this
+repository under `results/`.
 
 ### Aggregate Metrics
 
@@ -346,24 +353,40 @@ dynamic spatial reasoning. Those remain the next targets for training changes.
 ## Reproduction Notes
 
 This repository is a clean summary of the experiment, not a fully self-contained
-model release. To reproduce the original run, you need:
-
-1. LTX2.3 official distilled checkpoint.
-2. Gemma text encoder used by LTX2.3.
-3. LTX2.3 spatial upsampler.
-4. Preprocessed AV latent dataset.
-5. VBench-2.0 environment and local model cache.
-6. The DMD2000 LoRA checkpoint, stored outside this Git repository.
-
-All original scripts contain absolute paths from the 98-server workspace. Update
-these paths before running elsewhere:
+model release. To reproduce the run, prepare the following local paths first:
 
 ```text
-/keyan/LTX-2.3
-/keyan/lsh/lsh_teacher_cache_8step_distill
-/keyan/lsh/datasets_full-modality-video-caption
-/keyan/lsh/VBench
+checkpoints/
+├── ltx-2.3-22b-distilled-1.1.safetensors
+├── ltx-2.3-spatial-upscaler-x2-1.1.safetensors
+├── gemma/
+├── phase1/lora_weights_step_01500.safetensors
+└── dmd_phase2/lora_weights_step_02000.safetensors
+
+data/
+└── full-modality-video-caption/preprocessed_1280x704x121_av/
+
+external/
+└── VBench-2.0/
 ```
+
+Then update these fields in the YAML files before running:
+
+```text
+model.model_path
+model.text_encoder_path
+model.load_checkpoint
+training_strategy.teacher_model_path
+training_strategy.critic_model_path
+data.preprocessed_data_root
+output_dir
+vbench2.prompts_dir
+vbench2.prompts_aug_dir
+vbench2.output_dir
+```
+
+The committed configs preserve the original experiment values for auditability,
+so they are not plug-and-play until those paths are changed.
 
 ## Commands
 
