@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Activate UV Environment
-source /data/weiqin/AgnesVideoBench/Envs/VB/bin/activate
-cd /data/weiqin/AgnesVideoBench/workspace/VBench/VBench-2.0
+PROJECT_ROOT="${PROJECT_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+VBENCH_ROOT="${VBENCH_ROOT:-${PROJECT_ROOT}/external/VBench-2.0}"
+VBENCH_ENV="${VBENCH_ENV:-${VBENCH_ROOT}/.venv}"
 
-# Point to Local Checkpoints/Models and disable Hugging Face online verification/retries
-export VBENCH2_CACHE_DIR=/data/weiqin/AgnesVideoBench/Models/vbench
-export HF_HOME=/data/weiqin/AgnesVideoBench/Models/huggingface
-export TORCH_HOME=/data/weiqin/AgnesVideoBench/Models/torch
-export HF_HUB_OFFLINE=1
-export TRANSFORMERS_OFFLINE=1
+# Activate VBench environment.
+source "${VBENCH_ENV}/bin/activate"
+cd "${VBENCH_ROOT}"
+
+# Point to local checkpoints/models and disable Hugging Face online verification/retries.
+export VBENCH2_CACHE_DIR="${VBENCH2_CACHE_DIR:-${VBENCH_ROOT}/models/vbench}"
+export HF_HOME="${HF_HOME:-${VBENCH_ROOT}/models/huggingface}"
+export TORCH_HOME="${TORCH_HOME:-${VBENCH_ROOT}/models/torch}"
+export HF_HUB_OFFLINE="${HF_HUB_OFFLINE:-1}"
+export TRANSFORMERS_OFFLINE="${TRANSFORMERS_OFFLINE:-1}"
 export HF_HUB_DISABLE_TELEMETRY=1
 
 #改这里即可，其他都不要动
-VIDEOS_ROOT="${VIDEOS_ROOT:-/keyan/yeyi0003/LTX-2/VBench/outputs/distill_lora_480P}"
-OUTPUT_ROOT="${OUTPUT_ROOT:-/keyan/yeyi0003/LTX-2/VBench/evaluation}"
+VIDEOS_ROOT="${VIDEOS_ROOT:-${PROJECT_ROOT}/outputs/vbench/distill_lora_480P}"
+OUTPUT_ROOT="${OUTPUT_ROOT:-${PROJECT_ROOT}/results/official8_vbench2_baseline}"
 
 
 # Define VBench dimensions
@@ -165,6 +170,6 @@ wait
 
 # ==================== STEP 3: 直接调用本地中文打分脚本 ====================
 echo -e "\n==== 评测全部结束，直接调用本地中文翻译与聚合逻辑进行打分 ===="
-python3 /data/weiqin/AgnesVideoBench/cal_local_scores.py --dir "$OUTPUT_ROOT" 2>&1 | tee "${OUTPUT_ROOT}/cal_local_scores.log"
+python3 "${VBENCH_ROOT}/cal_local_scores.py" --dir "$OUTPUT_ROOT" 2>&1 | tee "${OUTPUT_ROOT}/cal_local_scores.log"
 
 echo "==== 评测与打分完整流程已结束，日志已写入 ${OUTPUT_ROOT}/cal_local_scores.log ===="

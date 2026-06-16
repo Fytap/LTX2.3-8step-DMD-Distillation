@@ -9,7 +9,7 @@ experiment.
 Upload all files from:
 
 ```text
-/keyan/lsh/ltx23-dmd-distillation/release_assets/v0.1-dmd2000/
+release_assets/v0.1-dmd2000/
 ```
 
 Expected assets:

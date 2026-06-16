@@ -8,7 +8,7 @@
    teacher-dev40 variants.
 5. Settled on an 8-step official-distill-compatible path:
    phase1 quality LoRA to 1500 steps, then phase2 DMD from that checkpoint.
-6. Evaluated DMD2000 with full VBench-2.0 under `/keyan/lsh/VBench`.
+6. Evaluated DMD2000 with full VBench-2.0 under `external/VBench-2.0`.
 
 Key conclusion: DMD2000 improved the VBench leaderboard score versus the copied
 baseline reference in this workspace, but action ordering and dynamic spatial

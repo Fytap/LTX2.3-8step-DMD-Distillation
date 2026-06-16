@@ -370,7 +370,7 @@ external/
 └── VBench-2.0/
 ```
 
-Then update these fields in the YAML files before running:
+The committed YAML files use these portable relative paths by default. If your local layout is different, override or edit these fields before running:
 
 ```text
 model.model_path
@@ -385,8 +385,7 @@ vbench2.prompts_aug_dir
 vbench2.output_dir
 ```
 
-The committed configs preserve the original experiment values for auditability,
-so they are not plug-and-play until those paths are changed.
+The helper scripts also accept environment variables such as PROJECT_ROOT, LTX_ROOT, LTX_ENV, CUDA_VISIBLE_DEVICES, PHASE1_CONFIG, and DMD_CONFIG, so the same code can run on a different machine without exposing server-local paths.
 
 ## Commands
 
@@ -445,8 +444,7 @@ The following are intentionally excluded:
 - DMD2000 is a research checkpoint, not a production release.
 - Improvements are not uniform across all VBench dimensions.
 - Dynamic spatial relationship and motion order remain weak.
-- The training configs are path-specific and require cleanup for public
-  reproduction.
+- The repository uses portable relative paths, but users still need to provide local model weights, Gemma text encoder files, data, and VBench assets.
 - VBench scores are useful for regression tracking, but they do not replace
   human inspection of generated videos.
 

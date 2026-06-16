@@ -8,9 +8,7 @@ storage.
 
 ## Path portability
 
-Most scripts were captured from the 98-server experiment and contain absolute
-paths such as `/keyan/lsh/...` and `/keyan/LTX-2.3/...`. Update these before
-running on another machine.
+The public scripts use PROJECT_ROOT-relative defaults and environment variables. If your local layout differs, override PROJECT_ROOT, LTX_ROOT, LTX_ENV, VIDEOS_ROOT, OUTPUT_ROOT, or the YAML path fields instead of hard-coding machine-local paths.
 
 ## GPU policy
 

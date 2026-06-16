@@ -1,6 +1,6 @@
 model:
-  model_path: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
-  text_encoder_path: /keyan/LTX-2.3/gemma
+  model_path: checkpoints/ltx-2.3-22b-distilled-1.1.safetensors
+  text_encoder_path: checkpoints/gemma
   training_mode: lora
   load_checkpoint: null
 
@@ -16,7 +16,7 @@ lora:
 
 training_strategy:
   name: distill_text_to_video
-  teacher_model_path: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
+  teacher_model_path: checkpoints/ltx-2.3-22b-distilled-1.1.safetensors
   with_audio: true
   audio_latents_dir: audio_latents
   distill_stage: stage1
@@ -60,7 +60,7 @@ acceleration:
   offload_optimizer_during_validation: false
 
 data:
-  preprocessed_data_root: /keyan/lsh/datasets_full-modality-video-caption/preprocessed_1280x704x121_av
+  preprocessed_data_root: data/full-modality-video-caption/preprocessed_1280x704x121_av
   num_dataloader_workers: 8
 
 validation:
@@ -104,4 +104,4 @@ wandb:
   log_validation_videos: false
 
 seed: 42
-output_dir: /keyan/lsh/lsh_teacher_cache_8step_distill/runs/official8_student8_av_quality_phase1_1500_keeponly
+output_dir: outputs/runs/official8_student8_av_quality_phase1_1500_keeponly

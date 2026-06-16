@@ -3,13 +3,13 @@
 Evaluation path in the original workspace:
 
 ```text
-/keyan/lsh/VBench/evaluation_dmd2000_480P
+results/vbench/dmd2000_480P
 ```
 
 Generation path:
 
 ```text
-/keyan/lsh/VBench/outputs/dmd2000_480P
+outputs/vbench/dmd2000_480P
 ```
 
 Generation used official LTX DistilledPipeline:
