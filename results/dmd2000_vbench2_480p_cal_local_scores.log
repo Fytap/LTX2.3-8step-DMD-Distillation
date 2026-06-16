@@ -1,0 +1,39 @@
+Scanning evaluation root: /keyan/lsh/VBench/evaluation_dmd2000_480P
+
+======================================================================================================================
+| 一级业务维度         | 子维度中文         | VBench 原始维度 (English)    | 评测得分           | 最新结果来源文件       |
+----------------------------------------------------------------------------------------------------------------------
+| 动作一致性           | 动态属性           | Dynamic Attribute            | 0.443223 (44.32%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 运动合理性         | Motion Rationality           | 0.545977 (54.60%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 动态空间关系       | Dynamic Spatial Relationship | 0.328502 (32.85%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 动作顺序理解       | Motion Order Understanding   | 0.343434 (34.34%)  | results_2026-06-16-14:40:04_eval_results.json |
+| 物理规律             | 力学表现           | Mechanics                    | 0.708955 (70.90%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 热学               | Thermotics                   | 0.675676 (67.57%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 人物交互           | Human Interaction            | 0.760000 (76.00%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 材质               | Material                     | 0.754545 (75.45%)  | results_2026-06-16-14:40:04_eval_results.json |
+| 人物一致性           | 人物身份           | Human Identity               | 0.656827 (65.68%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 人物交互           | Human Interaction            | 0.760000 (76.00%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 人体结构           | Human Anatomy                | 0.878915 (87.89%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 人物服饰           | Human Clothes                | 0.900000 (90.00%)  | results_2026-06-16-14:40:04_eval_results.json |
+| 运镜一致性           | 镜头运动           | Camera Motion                | 0.503086 (50.31%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 多视角一致性       | Multi-View Consistency       | 0.532717 (53.27%)  | results_2026-06-16-14:40:04_eval_results.json |
+| 情境一致性           | 复杂情节           | Complex Plot                 | 0.139815 (13.98%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 复杂场景           | Complex Landscape            | 0.211111 (21.11%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 实例保持           | Instance Preservation        | 0.894737 (89.47%)  | results_2026-06-16-14:40:04_eval_results.json |
+| 多样性与构图         | 多样性             | Diversity                    | 0.558211 (55.82%)  | results_2026-06-16-14:40:04_eval_results.json |
+| -                    | 构图               | Composition                  | 0.559958 (56.00%)  | results_2026-06-16-14:40:04_eval_results.json |
+======================================================================================================================
+
++--------------------------------------------+-----------------------------+
+| 一级维度 / 综合指标名称                    | 聚合得分 (Aggregate Score)  |
++--------------------------------------------+-----------------------------+
+| 动作一致性 (Action Consistency)            | 0.415284 (41.53%)           |
+| 物理规律 (Physical Laws)                   | 0.724794 (72.48%)           |
+| 人物一致性 (Human Consistency)             | 0.798936 (79.89%)           |
+| 运镜一致性 (Camera Consistency)            | 0.517902 (51.79%)           |
+| 情境一致性 (Contextual Consistency)        | 0.415221 (41.52%)           |
+| 多样性与构图 (Diversity & Composition)     | 0.559085 (55.91%)           |
++--------------------------------------------+-----------------------------+
+| 打榜参考分数 (LEADERBOARD SCORE)           | 0.572016 (57.20%)           |
+| 原始 VBench Overall (ORIGINAL VBENCH)      | 0.629842 (62.98%)           |
++--------------------------------------------+-----------------------------+

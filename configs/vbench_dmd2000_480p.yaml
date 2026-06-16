@@ -1,0 +1,43 @@
+# 实验一:原始蒸馏权重(不带任何 LoRA)
+#   checkpoint: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
+#   GPU: 0,1
+#
+# DistilledPipeline → 为 VBench-2.0 评测批量生成 mp4 视频
+# 固定 8(stage-1) + 4(stage-2) 步蒸馏 sigmas,无 cfg/steps/negative_prompt/guider 等参数。
+
+model:
+  distilled_checkpoint_path: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
+  spatial_upsampler_path:    /keyan/LTX-2.3/ltx-2.3-spatial-upscaler-x2-1.1.safetensors
+  gemma_root:                /keyan/LTX-2.3/gemma
+
+  # DMD2000: official8 base + phase2 DMD LoRA step 02000
+  loras:
+    - path: /keyan/lsh/lsh_teacher_cache_8step_distill/runs/official8_student8_av_dmd_rank16_phase2_from1500_10000/checkpoints/lora_weights_step_02000.safetensors
+      strength: 1.0
+
+  # null / 不填 = bf16 全精度; 也可填 "fp8-cast"(配 bf16 ckpt) 或 "fp8-scaled-mm"(配 fp8 ckpt)
+  quantization: null
+
+params:
+  # 与原 480P 评测一致(最终输出分辨率,需整除 64;stage-1 自动取一半)
+  height: 512
+  width: 832
+  num_frames: 121
+  frame_rate: 24.0
+  enhance_prompt: false
+
+vbench2:
+  prompts_dir:     /data/weiqin/AgnesVideoBench/workspace/VBench/VBench-2.0/prompts/prompt
+  prompts_aug_dir: /data/weiqin/AgnesVideoBench/workspace/VBench/VBench-2.0/prompts/prompt_aug/VBench2_aug_prompt
+  output_dir:      /keyan/lsh/VBench/outputs/dmd2000_480P
+
+  # 需要评测的维度;留空 [] = 评测全部 18 个维度
+  dimensions: []
+  # 每个维度只取前 N 条 prompt;0 = 全部
+  limit_prompts: 0
+  base_seed: 521
+
+  parallel:
+    gpus: "0,1,2,3,4,5,6,7"   # this DMD2000 VBench test uses all 8 GPUs
+    # 实测:H200(143GB)单 worker 峰值 ~42GB。3 worker/卡 峰值 ~124GB(留 ~19GB 余量,稳)。
+    per_gpu_workers: 3    # 每张卡上启动的进程数

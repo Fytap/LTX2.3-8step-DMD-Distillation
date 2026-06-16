@@ -1,0 +1,39 @@
+# Large model/data/video artifacts
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.bin
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.tar
+*.tar.gz
+*.zip
+*.parquet
+*.jsonl
+
+# Generated outputs
+outputs/
+datasets/
+checkpoints/
+logs/
+runs/
+VBench/
+vbench_cache/
+audio_latents/
+preprocessed*/
+
+# Python/env/cache
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.cache/
+
+# Local secrets
+*.key
+*.pem
+.env

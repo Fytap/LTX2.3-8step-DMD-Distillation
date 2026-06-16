@@ -1,0 +1,107 @@
+model:
+  model_path: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
+  text_encoder_path: /keyan/LTX-2.3/gemma
+  training_mode: lora
+  load_checkpoint: null
+
+lora:
+  rank: 16
+  alpha: 16
+  dropout: 0.05
+  target_modules:
+    - to_k
+    - to_q
+    - to_v
+    - to_out.0
+
+training_strategy:
+  name: distill_text_to_video
+  teacher_model_path: /keyan/LTX-2.3/ltx-2.3-22b-distilled-1.1.safetensors
+  with_audio: true
+  audio_latents_dir: audio_latents
+  distill_stage: stage1
+  stage1_sigmas:
+    - 1.0
+    - 0.99375
+    - 0.9875
+    - 0.98125
+    - 0.975
+    - 0.909375
+    - 0.725
+    - 0.421875
+    - 0.0
+  sigma_sampling_strategy: interval_weighted
+  trajectory_distillation: true
+  trajectory_step_sampling: cycle
+  trajectory_endpoint_loss_weight: 1.0
+  trajectory_transition_loss_weight: 0.3
+  video_loss_weight: 1.0
+  audio_loss_weight: 0.2
+  clean_x0_loss_weight: 0.01
+  quality_moment_loss_weight: 0.01
+  quality_delta_loss_weight: 0.01
+  enable_dmd: false
+
+optimization:
+  learning_rate: 5.0e-7
+  steps: 1500
+  batch_size: 1
+  gradient_accumulation_steps: 1
+  max_grad_norm: 0.3
+  optimizer_type: adamw
+  scheduler_type: constant
+  scheduler_params: {}
+  enable_gradient_checkpointing: true
+
+acceleration:
+  mixed_precision_mode: bf16
+  quantization: null
+  load_text_encoder_in_8bit: false
+  offload_optimizer_during_validation: false
+
+data:
+  preprocessed_data_root: /keyan/lsh/datasets_full-modality-video-caption/preprocessed_1280x704x121_av
+  num_dataloader_workers: 8
+
+validation:
+  prompts: []
+  negative_prompt: "worst quality, inconsistent motion, blurry, jittery, distorted, washed out, low saturation"
+  images: null
+  reference_videos: null
+  video_dims: [1280, 704, 121]
+  frame_rate: 24.0
+  seed: 42
+  inference_steps: 8
+  interval: null
+  guidance_scale: 1.0
+  stg_scale: 0.0
+  stg_blocks: [29]
+  stg_mode: stg_av
+  generate_audio: true
+  skip_initial_validation: true
+  include_reference_in_output: false
+
+checkpoints:
+  interval: 1500
+  keep_last_n: 2
+  precision: bfloat16
+  no_resume: true
+  save_training_state: minimal
+
+flow_matching:
+  timestep_sampling_mode: uniform
+  timestep_sampling_params: {}
+
+hub:
+  push_to_hub: false
+  hub_model_id: null
+
+wandb:
+  enabled: false
+  project: ltx23-8step-official8-quality-phase1
+  entity: null
+  tags: [ltx23, eight-step, official8-teacher, av, quality-phase1, no-dmd, h200, 720p]
+  log_validation_videos: false
+
+seed: 42
+output_dir: /keyan/lsh/lsh_teacher_cache_8step_distill/runs/official8_student8_av_quality_phase1_1500_keeponly
