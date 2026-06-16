@@ -37,3 +37,6 @@ env/
 *.key
 *.pem
 .env
+
+# Local GitHub Release staging artifacts
+release_assets/
