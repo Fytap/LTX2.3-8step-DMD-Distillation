@@ -92,8 +92,6 @@ additional teacher, but that is a different experiment from DMD2000.
 
 ## Framework Choice
 
-This experiment is **not OmniForcing training**.
-
 The project started from earlier Self-Forcing-Plus / DMD adaptation attempts,
 but DMD2000 was trained in a modified LTX trainer path and evaluated through the
 official LTX DistilledPipeline. In practical terms:
