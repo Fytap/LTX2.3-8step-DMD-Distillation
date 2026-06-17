@@ -44,6 +44,32 @@ Config: `configs/dmd_phase2_from1500_to10000.yaml`
 - DMD gradient normalization: enabled
 - Gradient clipping: generator 0.2, critic 0.2
 
+
+## Why Use an 8-step Teacher?
+
+The final DMD2000 setup uses the official 8-step distilled checkpoint as both
+the teacher/reference model and the student initialization. This means the goal
+is not direct 40-step-to-8-step compression. The goal is to improve or maintain
+the official distilled model under the same inference pipeline through LoRA-based
+domain adaptation and conservative DMD distribution matching.
+
+This choice has several practical benefits:
+
+- it avoids training/inference mismatch with the official DistilledPipeline;
+- it preserves the official 8-step sigma schedule and two-stage inference path;
+- it keeps DMD updates small enough to reduce saturation and structural damage;
+- it allows the final artifact to remain a lightweight LoRA rather than a full
+  checkpoint;
+- it makes baseline comparison cleaner because teacher/reference and inference
+  pipeline are fixed.
+
+The limitation is also clear: because the teacher is not a stronger 40-step dev
+model, this setup should be described as 8-step distilled-model adaptation with
+DMD, not as a full stronger-teacher distillation experiment. A 40-step dev
+teacher can be introduced in future work for higher quality ceiling, for example
+through final-latent distillation, trajectory matching, and perceptual/temporal
+losses while still preserving the 8-step inference target.
+
 ## DMD Lineage
 
 This work is closer to Self-Forcing-style DMD than OmniForcing:

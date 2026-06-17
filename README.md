@@ -51,6 +51,45 @@ official distilled checkpoint:
 ltx-2.3-22b-distilled-1.1.safetensors + DMD2000 LoRA
 ```
 
+
+## Why 8-step Teacher for an 8-step Student?
+
+DMD2000 does not claim to distill new knowledge from a stronger 40-step teacher.
+Both phase1 and phase2 use the official `ltx-2.3-22b-distilled-1.1` checkpoint
+as the base student and teacher/reference model. This is a deliberate engineering
+choice for this experiment.
+
+The main reason is pipeline alignment. The target deployment path is the official
+LTX DistilledPipeline, so training against the same 8-step distilled model keeps
+the student close to the sampler, sigma schedule, latent scale, and two-stage
+inference behavior used at test time. Earlier experiments showed that a mismatch
+between training logic and the distilled inference path can easily produce blur,
+washed-out color, or unstable motion.
+
+In this setting, DMD is used less as a classic stronger-teacher-to-weaker-student
+compression method and more as a lightweight distribution correction method on
+top of the official distilled prior:
+
+- **Domain adaptation:** the LoRA is trained on the target audio-video latent
+  dataset, so it can adapt the official 8-step prior to the data distribution
+  used in the experiment.
+- **Quality-preserving regularization:** phase1 first learns a conservative
+  LoRA under the official distilled model before the DMD objective is enabled.
+- **Fake-real distribution matching:** phase2 adds a critic and DMD loss to nudge
+  generated latents toward the training latent distribution while keeping the
+  official 8-step teacher as a stability anchor.
+- **Inference compatibility:** the final artifact is only a LoRA and can be
+  injected into the official DistilledPipeline, instead of requiring a custom
+  sampler at inference time.
+
+The advantage of this design is not a higher theoretical quality ceiling than a
+40-step teacher. Its advantage is a controlled and deployable experiment: the
+student remains close to the official 8-step model, the comparison against the
+official baseline is fair, and any gain/loss can be attributed to the LoRA + DMD
+adaptation rather than to a different inference pipeline. A future stronger
+variant could use `ltx-2.3-22b-dev` with 40-step teacher trajectories as an
+additional teacher, but that is a different experiment from DMD2000.
+
 ## Framework Choice
 
 This experiment is **not OmniForcing training**.
@@ -204,8 +243,9 @@ ngqtrung/full-modality-video-caption
 ```
 
 The repository does not include this dataset. Only the training configs and
-loss histories are included. If you reproduce the experiment, update the
-absolute paths in the YAML files to your local dataset location.
+loss histories are included. The committed YAML files use portable relative
+paths; if your local layout differs, update the path fields or override them
+through your launch scripts.
 
 ## Inference
 
