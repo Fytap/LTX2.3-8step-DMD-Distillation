@@ -13,3 +13,7 @@
 Key conclusion: DMD2000 improved the VBench leaderboard score versus the copied
 baseline reference in this workspace, but action ordering and dynamic spatial
 relationship remain weak points.
+
+
+For the detailed rationale behind these pivots, see
+docs/how_we_arrived_at_dmd2000.md.

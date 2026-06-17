@@ -21,6 +21,8 @@ official DistilledPipeline.
   OmniForcing.
 - Full VBench-2.0 evaluation is included for official 8-step baseline vs
   DMD2000.
+- A detailed failure-to-final-strategy retrospective is available in
+  docs/how_we_arrived_at_dmd2000.md.
 - Large artifacts are excluded from Git: checkpoints, datasets, generated
   videos, and VBench model caches.
 
